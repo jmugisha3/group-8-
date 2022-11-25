@@ -35,6 +35,7 @@ jobs:
         working-directory: ./codebase/rdicidr-0.1.0
       # Upload the artifact for other stages to use
       - name: Share artifact in github workflow
+        working-directory: ./codebase/rdicidr-0.1.0
         uses: actions/upload-artifact@v1
         with:
           name: build
