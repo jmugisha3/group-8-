@@ -58,5 +58,5 @@ jobs:
           application_name: nodejs
           environment_name: Nodejs-env-2
           region: us-east-2
-          version_label: "'Sample Application'-${{ steps.format-time.outputs.replaced }}"
+          version_label: "Sample Application"
           deployment_package: ./codebase/rdicidr-0.1.0/deploy.zip
