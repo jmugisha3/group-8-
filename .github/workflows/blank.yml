@@ -24,14 +24,19 @@ jobs:
           path: ./codebase/rdicidr-0.1.0
       - run: ls
       - run: npm install --force
+        working-directory: ./codebase/rdicidr-0.1.0
       - run: npm run lint
+        working-directory: ./codebase/rdicidr-0.1.0
       - run: npm install -g prettier
       - run: npm run prettier
+        working-directory: ./codebase/rdicidr-0.1.0
       - run: npm run test
-      - run: npm run build 
+        working-directory: ./codebase/rdicidr-0.1.0
+      - run: npm run build
+        working-directory: ./codebase/rdicidr-0.1.0 
       - name: Generate deployment package
+        working-directory: ./codebase/rdicidr-0.1.0
         run: zip -r deploy.zip * .[^.]* -x "**node_modules**"
-
       - name: Get timestamp
         uses: gerred/actions/current-time@master
         id: current-time
@@ -50,8 +55,8 @@ jobs:
         with:
           aws_access_key: ${{secrets.ACCESS_KEY_ID}}
           aws_secret_key: ${{secrets.SECRET_ACCESS_KEY}}
-          application_name: <application name>
-          environment_name: <Replace with your environment name>
+          application_name: nodejs
+          environment_name: Nodejs-env
           region: us-east-2
           version_label: "version-label-${{ steps.format-time.outputs.replaced }}"
           deployment_package: deploy.zip
