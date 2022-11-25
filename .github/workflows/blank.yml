@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           path: ./codebase/rdicidr-0.1.0
       - run: ls
-      - run: npm install --force --unsafe-perm node-sass
+      - run: npm install --force --unsafe-perm=true --allow-root
         working-directory: ./codebase/rdicidr-0.1.0
       - run: npm run lint
         working-directory: ./codebase/rdicidr-0.1.0
