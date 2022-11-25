@@ -21,23 +21,37 @@ jobs:
         uses: actions/setup-node@v3
         with: 
           node-version: ${{ matrix.node-version }}
+          path: ./codebase/rdicidr-0.1.0
       - run: ls
       - run: npm install --force
-        working-directory: ./codebase/rdicidr-0.1.0
       - run: npm run lint
-        working-directory: ./codebase/rdicidr-0.1.0
       - run: npm install -g prettier
       - run: npm run prettier
-        working-directory: ./codebase/rdicidr-0.1.0
       - run: npm run test
-        working-directory: ./codebase/rdicidr-0.1.0
       - run: npm run build 
-        working-directory: ./codebase/rdicidr-0.1.0
-      # Upload the artifact for other stages to use
-      - name: Share artifact in github workflow
-        uses: actions/upload-artifact@v1
+      - name: Generate deployment package
+        run: zip -r deploy.zip * .[^.]* -x "**node_modules**"
+
+      - name: Get timestamp
+        uses: gerred/actions/current-time@master
+        id: current-time
+
+      - name: Run string replace
+        uses: frabert/replace-string-action@master
+        id: format-time
         with:
-          name: build
-          path: ./codebase/rdicidr-0.1.0/build
+          pattern: '[:\.]+'
+          string: "${{ steps.current-time.outputs.time }}"
+          replace-with: '-'
+          flags: 'g'
 
-
+      - name: Beanstalk Deploy for app
+        uses: einaregilsson/beanstalk-deploy@v16
+        with:
+          aws_access_key: ${{secrets.ACCESS_KEY_ID}}
+          aws_secret_key: ${{secrets.SECRET_ACCESS_KEY}}
+          application_name: <application name>
+          environment_name: <Replace with your environment name>
+          region: us-east-2
+          version_label: "version-label-${{ steps.format-time.outputs.replaced }}"
+          deployment_package: deploy.zip
