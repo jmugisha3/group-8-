@@ -49,7 +49,7 @@ jobs:
           string: "${{ steps.current-time.outputs.time }}"
           replace-with: '-'
           flags: 'g'
-
+  deploy-dev:
       - name: Beanstalk Deploy for app
         uses: einaregilsson/beanstalk-deploy@v16
         if: github.ref == ${{refs/heads/dev}}
@@ -61,7 +61,7 @@ jobs:
           region: us-east-2
           version_label: " Sample Application-${{ steps.format-time.outputs.replaced }}"
           deployment_package: ./codebase/rdicidr-0.1.0/deploy.zip
-
+  deploy-staging:
         if: github.ref == ${{ refs/heads/staging }}
         with:
           aws_access_key: ${{secrets.ACCESS_KEY_ID}}
@@ -71,7 +71,7 @@ jobs:
           region: us-east-2
           version_label: " Sample Application-${{ steps.format-time.outputs.replaced }}"
           deployment_package: ./codebase/rdicidr-0.1.0/deploy.zip
-
+  deploy-prod:
         if: github.ref == ${{refs/heads/prod}}
         with:
           aws_access_key: ${{secrets.ACCESS_KEY_ID}}
